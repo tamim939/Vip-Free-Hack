@@ -5,6 +5,12 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --color-neon-green: #00FF00;
   --color-brutal-black: #000000;
+  --animate-scanline: scanline 4s linear infinite;
+
+  @keyframes scanline {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
 }
 
 @layer base {
