@@ -9,6 +9,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
   const [redirectTimer, setRedirectTimer] = useState(1);
@@ -19,7 +20,7 @@ export default function App() {
   const INTERMEDIATE_SITE = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
 
   useEffect(() => {
-    if (isLoggedIn && isUnlocked) {
+    if (isLoggedIn && hasClaimed && isUnlocked) {
       // Initialize prediction immediately
       const list = ["SMALL 1,3", "SMALL 2,4", "SMALL 0,4", "BIG 6,8", "BIG 7,9", "BIG 5,9"];
       
@@ -144,6 +145,121 @@ export default function App() {
   };
 
   if (isLoggedIn) {
+    if (!hasClaimed) {
+      return (
+        <div className="fixed inset-0 bg-[#8B0000] flex items-center justify-center p-4 overflow-hidden font-sans">
+          {/* Background decorative elements (simulating a game) */}
+          <div className="absolute inset-0 opacity-30">
+            <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-500 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-10 right-10 w-40 h-40 bg-orange-600 rounded-full blur-3xl animate-pulse delay-700" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-[20px] border-yellow-600/20 rounded-full animate-spin-slow" />
+          </div>
+
+          <motion.div 
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="relative w-full max-w-[340px] bg-gradient-to-b from-white/10 to-black/40 backdrop-blur-md border-4 border-yellow-500/50 rounded-[40px] p-8 text-center shadow-[0_0_50px_rgba(234,179,8,0.3)]"
+          >
+            {/* Header */}
+            <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-red-500 to-orange-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-1 italic">
+              Congratulations!
+            </h2>
+            <div className="text-xl font-black text-white drop-shadow-md mb-1 uppercase tracking-tight">
+              Free Money
+            </div>
+            <div className="text-sm font-bold text-white/90 mb-6 italic">
+              Here's your welcome bonus
+            </div>
+
+            {/* Coin Bowl Visual */}
+            <div className="relative h-48 mb-6 flex items-center justify-center">
+              {/* Floating coins */}
+              <motion.div 
+                animate={{ y: [-10, 10, -10], rotate: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute top-0 left-1/4 w-8 h-8 bg-yellow-400 rounded-full border-2 border-yellow-600 shadow-lg flex items-center justify-center text-[10px] font-bold text-yellow-800"
+              >৳</motion.div>
+              <motion.div 
+                animate={{ y: [10, -10, 10], rotate: [0, -15, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute top-4 right-1/4 w-10 h-10 bg-yellow-400 rounded-full border-2 border-yellow-600 shadow-lg flex items-center justify-center text-xs font-bold text-yellow-800"
+              >৳</motion.div>
+
+              {/* The Bowl */}
+              <div className="relative w-40 h-32 mt-8">
+                {/* Coins in bowl */}
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-20 bg-yellow-500 rounded-full shadow-inner overflow-hidden">
+                  <div className="grid grid-cols-4 gap-1 p-2 opacity-80">
+                    {[...Array(12)].map((_, i) => (
+                      <div key={i} className="w-full aspect-square bg-yellow-400 rounded-full border border-yellow-600 shadow-sm" />
+                    ))}
+                  </div>
+                </div>
+                {/* Bowl body */}
+                <div className="absolute inset-0 bg-gradient-to-b from-yellow-400 via-red-600 to-red-900 rounded-b-[60px] border-t-4 border-yellow-300 shadow-2xl" />
+                <div className="absolute top-0 left-0 w-full h-4 bg-yellow-300/30 rounded-full blur-sm" />
+              </div>
+            </div>
+
+            {/* Amount Display */}
+            <div className="relative mb-8">
+              <div className="absolute inset-0 bg-black/40 blur-md -skew-x-12" />
+              <div className="relative py-2 px-4 border-y-2 border-yellow-500/30">
+                <span className="text-4xl font-black text-yellow-400 drop-shadow-[0_2px_10px_rgba(234,179,8,0.5)] tracking-tighter">
+                  199,990
+                </span>
+              </div>
+            </div>
+
+            {/* Claim Button */}
+            <button 
+              onClick={() => setHasClaimed(true)}
+              className="relative group w-full py-4 bg-gradient-to-b from-yellow-300 to-yellow-600 rounded-full text-black font-black text-2xl uppercase tracking-widest shadow-[0_10px_20px_rgba(0,0,0,0.4)] active:scale-95 transition-all"
+            >
+              Claim
+              {/* Hand Cursor Icon Animation */}
+              <motion.div 
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  x: [0, 5, 0],
+                  y: [0, 5, 0]
+                }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="absolute -bottom-4 -right-4 w-12 h-12 pointer-events-none"
+              >
+                <svg viewBox="0 0 24 24" fill="white" stroke="black" strokeWidth="1" className="w-full h-full drop-shadow-lg">
+                  <path d="M13,3C13,3 12,3 12,4C12,5 13,6 13,6V9H12V2C12,2 11,2 11,3C11,4 12,5 12,5V9H11V3C11,3 10,3 10,4C10,5 11,6 11,6V9H10V5C10,5 9,5 9,6C9,7 10,8 10,8V16C10,16 10,20 14,20C18,20 18,16 18,16V10C18,10 18,9 17,9C16,9 16,10 16,10V12H15V6C15,6 15,5 14,5C13,5 13,6 13,6V9H12V3Z" />
+                </svg>
+              </motion.div>
+            </button>
+          </motion.div>
+
+          {/* Recent Winners Ticker */}
+          <div className="absolute bottom-10 left-0 right-0 overflow-hidden px-4">
+            <div className="max-w-xs mx-auto bg-black/60 backdrop-blur-sm rounded-full py-1 px-4 border border-white/10">
+              <motion.div 
+                animate={{ x: [-20, 20, -20] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                className="text-[10px] text-white/60 font-bold whitespace-nowrap text-center"
+              >
+                9158****07 Just had 200,000 coins
+              </motion.div>
+            </div>
+          </div>
+
+          <style>{`
+            @keyframes spin-slow {
+              from { transform: translate(-50%, -50%) rotate(0deg); }
+              to { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+            .animate-spin-slow {
+              animation: spin-slow 20s linear infinite;
+            }
+          `}</style>
+        </div>
+      );
+    }
+
     return (
       <div className="fixed inset-0 bg-black overflow-hidden">
         <iframe 
