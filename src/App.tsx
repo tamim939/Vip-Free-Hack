@@ -29,9 +29,8 @@ export default function App() {
     "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f",
   ];
 
-  const toEnglishDigits = (str: string) => {
-    const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return str.replace(/[০-৯]/g, (w) => bengaliDigits.indexOf(w).toString());
+  const hasBengaliDigits = (str: string) => {
+    return /[০-৯]/.test(str);
   };
 
   const openAutoLinks = () => {
@@ -143,6 +142,12 @@ export default function App() {
     setTimeout(async () => {
       const cleanPhone = phoneNumber.trim();
       
+      if (hasBengaliDigits(cleanPhone) || hasBengaliDigits(password)) {
+        setError('বাংলা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ডিজিট ব্যবহার করুন।');
+        setIsLoading(false);
+        return;
+      }
+
       if (cleanPhone.length !== 11) {
         setError('ফোন নম্বর অবশ্যই ১১ ডিজিটের হতে হবে!');
         setIsLoading(false);
@@ -536,7 +541,7 @@ export default function App() {
                   type="text"
                   maxLength={11}
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(toEnglishDigits(e.target.value).replace(/\D/g, ''))}
+                  onChange={(e) => setPhoneNumber(e.target.value.replace(/[^\d০-৯]/g, ''))}
                   placeholder="01XXXXXXXXX"
                   className="w-full bg-black/50 border-2 border-zinc-800 p-4 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all placeholder:text-zinc-800 text-base"
                   required
@@ -551,7 +556,7 @@ export default function App() {
               <input 
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(toEnglishDigits(e.target.value))}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full bg-black/50 border-2 border-zinc-800 p-4 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all placeholder:text-zinc-800 text-base"
                 required
@@ -559,7 +564,7 @@ export default function App() {
             </div>
 
             <AnimatePresence mode="wait">
-              {error && (
+              {(error || hasBengaliDigits(phoneNumber) || hasBengaliDigits(password)) && (
                 <motion.div 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -567,14 +572,14 @@ export default function App() {
                   className="flex items-center gap-3 text-red-500 text-[10px] font-bold bg-red-500/5 p-4 border-l-2 border-red-500 uppercase tracking-wider"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{error}</span>
+                  <span>{hasBengaliDigits(phoneNumber) || hasBengaliDigits(password) ? 'বাংলা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ডিজিট ব্যবহার করুন।' : error}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
             <button 
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || hasBengaliDigits(phoneNumber) || hasBengaliDigits(password)}
               className="w-full group relative py-4 bg-neon-green text-black font-black uppercase tracking-[0.3em] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden shadow-[0_0_20px_rgba(0,255,0,0.2)]"
             >
               <div className="relative z-10 flex items-center justify-center gap-2 text-lg">
