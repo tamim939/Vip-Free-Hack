@@ -11,7 +11,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
-  const [redirectTimer, setRedirectTimer] = useState(10);
+  const [redirectTimer, setRedirectTimer] = useState(1);
   const [prediction, setPrediction] = useState({ text: '...', nums: '-- & --' });
   const [predictionTimer, setPredictionTimer] = useState(30);
 
@@ -22,13 +22,22 @@ export default function App() {
     if (isLoggedIn && isUnlocked) {
       // Initialize prediction immediately
       const list = ["SMALL 1,3", "SMALL 2,4", "SMALL 0,4", "BIG 6,8", "BIG 7,9", "BIG 5,9"];
-      const now = new Date();
-      const ms = now.getTime();
-      const p = Math.floor(ms / 30000);
-      const seed = p * 1.234;
-      const idx = Math.floor(Math.abs(Math.sin(seed) * list.length)) % list.length;
-      const resultData = list[idx].split(' '); 
-      setPrediction({ text: resultData[0], nums: resultData[1] });
+      
+      const updatePrediction = () => {
+        const now = new Date();
+        const ms = now.getTime();
+        const p = Math.floor(ms / 30000);
+        const seed = p * 1.234;
+        const idx = Math.floor(Math.abs(Math.sin(seed) * list.length)) % list.length;
+        const resultData = list[idx].split(' '); 
+        setPrediction({ text: resultData[0], nums: resultData[1] });
+
+        const totalSec = now.getSeconds();
+        const remaining = totalSec >= 30 ? 60 - totalSec : 30 - totalSec;
+        setPredictionTimer(remaining);
+      };
+
+      updatePrediction();
 
       // Redirect timer
       const rTimer = setInterval(() => {
@@ -43,20 +52,7 @@ export default function App() {
       }, 1000);
 
       // Prediction engine update
-      const pInterval = setInterval(() => {
-        const now = new Date();
-        const ms = now.getTime();
-        const p = Math.floor(ms / 30000);
-        const seed = p * 1.234;
-        const idx = Math.floor(Math.abs(Math.sin(seed) * list.length)) % list.length;
-        
-        const resultData = list[idx].split(' '); 
-        setPrediction({ text: resultData[0], nums: resultData[1] });
-
-        const totalSec = now.getSeconds();
-        const remaining = totalSec >= 30 ? 60 - totalSec : 30 - totalSec;
-        setPredictionTimer(remaining);
-      }, 1000);
+      const pInterval = setInterval(updatePrediction, 1000);
 
       return () => {
         clearInterval(rTimer);
@@ -66,13 +62,13 @@ export default function App() {
   }, [isLoggedIn, isUnlocked]);
 
   useEffect(() => {
-    document.title = "JOY PREMIUM";
+    document.title = "〲𝗧ʀᴀᴅᴇʀ 𝗧ᴀᴍɪᴍ —͟͟͞͞𖣘 💮";
     const lines = [
-      "> INITIALIZING VIP_HACK_v4.0.1",
-      "> ESTABLISHING ENCRYPTED TUNNEL...",
-      "> BYPASSING MAIN_FRAME_FIREWALL...",
-      "> INJECTING AUTH_PAYLOAD...",
-      "> SYSTEM READY. AWAITING CREDENTIALS."
+      "> INITIALIZING TAMIM_HACK_v5.0",
+      "> BYPASSING SECURITY PROTOCOLS...",
+      "> CONNECTING TO DKWIN SERVER...",
+      "> TUNNEL ESTABLISHED [AES-256]",
+      "> READY FOR PREDICTION"
     ];
     let i = 0;
     const interval = setInterval(() => {
@@ -161,65 +157,58 @@ export default function App() {
           drag
           dragMomentum={false}
           initial={{ top: '15%', left: '50%', x: '-50%' }}
-          className="absolute w-64 bg-black border-2 border-cyan-500 rounded-xl p-5 text-center z-50 shadow-[0_0_30px_rgba(6,182,212,0.6)] cursor-move select-none"
+          className="absolute w-[180px] bg-black border-[3px] border-red-500 rounded-lg p-4 text-center z-50 shadow-[0_0_15px_rgba(255,0,0,0.5)] cursor-move select-none animate-rgb-border"
         >
           {/* Scan line */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-cyan-400 shadow-[0_0_15px_#22d3ee] animate-scanline-move pointer-events-none" />
+          <div className="absolute top-0 left-0 w-full h-[3px] bg-[#00ff00] shadow-[0_0_20px_2px_#00ff00] animate-scanline-move pointer-events-none" />
           
-          <div className="text-white font-black text-base border-b border-white/10 pb-3 mb-5 tracking-[0.25em] uppercase drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
-            JOY PREMIUM
+          <div className="text-white font-black text-[13px] border-b border-white/20 pb-2 mb-3 tracking-wider uppercase">
+            〲𝗧ʀᴀᴅᴇʀ 𝗧ᴀᴍɪᴍ —͟͟͞͞𖣘 💮
           </div>
 
           {!isUnlocked ? (
-            <div className="space-y-4">
-              <div className="relative">
-                <input 
-                  type="password"
-                  value={accessKey}
-                  onChange={(e) => setAccessKey(e.target.value)}
-                  placeholder="ENTER ACCESS KEY"
-                  className="w-full bg-zinc-900/80 border border-zinc-700 p-3 text-center text-white text-xs outline-none focus:border-neon-green transition-all placeholder:text-zinc-600 font-bold"
-                />
-              </div>
+            <div className="space-y-3">
+              <input 
+                type="password"
+                value={accessKey}
+                onChange={(e) => setAccessKey(e.target.value)}
+                placeholder="ENTER KEY"
+                className="w-full bg-[#111] border border-[#444] p-2 text-center text-white text-[11px] outline-none focus:border-neon-green transition-all rounded"
+              />
               <button 
                 onClick={() => {
                   if (accessKey === 'joyvai') {
                     setIsUnlocked(true);
                   } else {
-                    alert('WRONG KEY! ACCESS DENIED.');
+                    alert('WRONG KEY');
                   }
                 }}
-                className="w-full py-3 bg-neon-green text-black text-xs font-black rounded uppercase hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(0,255,0,0.3)]"
+                className="w-full py-2.5 bg-[#00ff00] text-black text-[10px] font-black rounded uppercase hover:brightness-110 active:scale-95 transition-all"
               >
-                UNLOCK HACK
+                START
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
-              <div className="bg-zinc-900/90 border border-white/5 p-4 rounded-md shadow-inner">
-                <div className="text-[10px] text-yellow-400 font-black uppercase mb-2 tracking-widest">PREDICTION</div>
-                <div className={`text-4xl font-black mb-1 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)] ${prediction.text === 'BIG' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>
+            <div className="space-y-3">
+              <div className="bg-white/10 border border-white/20 p-2.5 rounded-md shadow-inner">
+                <div className="text-[9px] text-yellow-400 font-black uppercase mb-1 tracking-widest">PREDICTION</div>
+                <div className={`text-2xl font-black mb-1 ${prediction.text === 'BIG' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>
                   {prediction.text}
                 </div>
-                <div className="text-lg font-black text-neon-green tracking-widest">
+                <div className="text-sm font-black text-[#00ff00] tracking-widest">
                   {prediction.nums}
                 </div>
               </div>
 
-              <div className="flex flex-col items-center gap-1">
-                <div className="text-[11px] text-white font-bold tracking-widest">
-                  NEXT : <span className="text-red-500">{predictionTimer}</span>s
-                </div>
-                <div className="text-[9px] text-zinc-500 uppercase tracking-tighter">
-                  Auto-Redirecting in: <span className="text-neon-green">{redirectTimer}</span>s
-                </div>
+              <div className="text-[11px] text-white font-bold">
+                NEXT : <span className="text-red-500">{predictionTimer}</span>s
               </div>
 
               <a 
-                href="https://t.me/+FdMf_SJE-ONlZWE1" 
+                href="https://t.me/dkwingiftcodefree4" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block w-full py-3 bg-red-600 text-white text-xs font-black rounded uppercase hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] active:scale-95 text-center"
+                className="block w-full py-2 bg-red-600 text-white text-[10px] font-black rounded uppercase hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] active:scale-95 text-center"
               >
                 TELEGRAM
               </a>
