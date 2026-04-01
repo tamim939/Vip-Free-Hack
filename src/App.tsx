@@ -12,11 +12,11 @@ export default function App() {
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
-  const [redirectTimer, setRedirectTimer] = useState(1);
+  const [redirectTimer, setRedirectTimer] = useState(5);
   const [prediction, setPrediction] = useState({ text: '...', nums: '-- & --' });
   const [predictionTimer, setPredictionTimer] = useState(30);
 
-  const REGISTRATION_LINK = "https://dkwin9.com/#/register?invitationCode=62371643494";
+  const REGISTRATION_LINK = "https://vip-free-hack-dk.vercel.app/";
   const INTERMEDIATE_SITE = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
 
   useEffect(() => {
