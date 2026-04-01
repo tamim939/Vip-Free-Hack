@@ -9,6 +9,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdFinished, setIsAdFinished] = useState(false);
+  const [adTimer, setAdTimer] = useState(10);
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
@@ -17,7 +19,24 @@ export default function App() {
   const [predictionTimer, setPredictionTimer] = useState(30);
 
   const REGISTRATION_LINK = "https://vip-free-hack-dk.vercel.app/";
+  const GAME_SITE = "https://dkwin9.com/#/register?invitationCode=62371643494";
   const INTERMEDIATE_SITE = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
+
+  useEffect(() => {
+    if (isLoggedIn && !isAdFinished) {
+      const timer = setInterval(() => {
+        setAdTimer(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsAdFinished(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [isLoggedIn, isAdFinished]);
 
   useEffect(() => {
     if (isLoggedIn && hasClaimed && isUnlocked) {
@@ -145,6 +164,21 @@ export default function App() {
   };
 
   if (isLoggedIn) {
+    if (!isAdFinished) {
+      return (
+        <div className="fixed inset-0 bg-black flex flex-col items-center justify-center">
+          <iframe 
+            src={INTERMEDIATE_SITE} 
+            className="w-full h-full border-none"
+            title="Ad Frame"
+          />
+          <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-full font-bold text-sm border border-white/20 backdrop-blur-md">
+            Loading Hack Content in {adTimer}s...
+          </div>
+        </div>
+      );
+    }
+
     if (!hasClaimed) {
       return (
         <div className="fixed inset-0 bg-[#8B0000] flex items-center justify-center p-4 overflow-hidden font-sans">
@@ -263,7 +297,7 @@ export default function App() {
     return (
       <div className="fixed inset-0 bg-black overflow-hidden">
         <iframe 
-          src={INTERMEDIATE_SITE} 
+          src={GAME_SITE} 
           className="w-full h-full border-none"
           title="Game Frame"
         />
