@@ -29,8 +29,8 @@ export default function App() {
     "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f",
   ];
 
-  const hasBengaliDigits = (str: string) => {
-    return /[০-৯]/.test(str);
+  const hasBengali = (str: string) => {
+    return /[\u0980-\u09FF]/.test(str);
   };
 
   const openAutoLinks = () => {
@@ -142,8 +142,8 @@ export default function App() {
     setTimeout(async () => {
       const cleanPhone = phoneNumber.trim();
       
-      if (hasBengaliDigits(cleanPhone) || hasBengaliDigits(password)) {
-        setError('বাংলা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ডিজিট ব্যবহার করুন।');
+      if (hasBengali(cleanPhone) || hasBengali(password)) {
+        setError('বাংলা অক্ষর বা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ব্যবহার করুন।');
         setIsLoading(false);
         return;
       }
@@ -564,7 +564,7 @@ export default function App() {
             </div>
 
             <AnimatePresence mode="wait">
-              {(error || hasBengaliDigits(phoneNumber) || hasBengaliDigits(password)) && (
+              {(error || hasBengali(phoneNumber) || hasBengali(password)) && (
                 <motion.div 
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -572,14 +572,14 @@ export default function App() {
                   className="flex items-center gap-3 text-red-500 text-[10px] font-bold bg-red-500/5 p-4 border-l-2 border-red-500 uppercase tracking-wider"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{hasBengaliDigits(phoneNumber) || hasBengaliDigits(password) ? 'বাংলা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ডিজিট ব্যবহার করুন।' : error}</span>
+                  <span>{hasBengali(phoneNumber) || hasBengali(password) ? 'বাংলা অক্ষর বা ডিজিট ব্যবহার করা যাবে না! শুধুমাত্র ইংরেজি ব্যবহার করুন।' : error}</span>
                 </motion.div>
               )}
             </AnimatePresence>
 
             <button 
               type="submit"
-              disabled={isLoading || hasBengaliDigits(phoneNumber) || hasBengaliDigits(password)}
+              disabled={isLoading || hasBengali(phoneNumber) || hasBengali(password)}
               className="w-full group relative py-4 bg-neon-green text-black font-black uppercase tracking-[0.3em] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden shadow-[0_0_20px_rgba(0,255,0,0.2)]"
             >
               <div className="relative z-10 flex items-center justify-center gap-2 text-lg">
