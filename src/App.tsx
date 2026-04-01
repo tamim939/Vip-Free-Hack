@@ -11,11 +11,11 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdFinished, setIsAdFinished] = useState(false);
   const [adPhase, setAdPhase] = useState(1);
-  const [adTimer, setAdTimer] = useState(12);
+  const [adTimer, setAdTimer] = useState(10);
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
-  const [redirectTimer, setRedirectTimer] = useState(12);
+  const [redirectTimer, setRedirectTimer] = useState(10);
   const [prediction, setPrediction] = useState({ text: '...', nums: '-- & --' });
   const [predictionTimer, setPredictionTimer] = useState(30);
 
@@ -43,7 +43,7 @@ export default function App() {
         } catch (e) {
           console.error("Error opening link:", e);
         }
-      }, i * 12000);
+      }, i * 10000);
     });
   };
 
@@ -54,7 +54,7 @@ export default function App() {
           if (prev <= 1) {
             if (adPhase === 1) {
               setAdPhase(2);
-              return 12;
+              return 10;
             } else {
               clearInterval(timer);
               setIsAdFinished(true);
