@@ -10,6 +10,7 @@ export default function App() {
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdFinished, setIsAdFinished] = useState(false);
+  const [adPhase, setAdPhase] = useState(1);
   const [adTimer, setAdTimer] = useState(12);
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -20,7 +21,8 @@ export default function App() {
 
   const REGISTRATION_LINK = "https://vip-free-hack-dk.vercel.app/";
   const GAME_SITE = "https://vip-free-hack-dk.vercel.app/";
-  const INTERMEDIATE_SITE = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
+  const INTERMEDIATE_SITE_1 = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
+  const INTERMEDIATE_SITE_2 = "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f";
 
   const AUTO_OPEN_LINKS = [
     "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013",
@@ -50,16 +52,21 @@ export default function App() {
       const timer = setInterval(() => {
         setAdTimer(prev => {
           if (prev <= 1) {
-            clearInterval(timer);
-            setIsAdFinished(true);
-            return 0;
+            if (adPhase === 1) {
+              setAdPhase(2);
+              return 12;
+            } else {
+              clearInterval(timer);
+              setIsAdFinished(true);
+              return 0;
+            }
           }
           return prev - 1;
         });
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isLoggedIn, isAdFinished]);
+  }, [isLoggedIn, isAdFinished, adPhase]);
 
   useEffect(() => {
     if (isLoggedIn && hasClaimed && isUnlocked) {
@@ -192,12 +199,12 @@ export default function App() {
       return (
         <div className="fixed inset-0 bg-black flex flex-col items-center justify-center">
           <iframe 
-            src={INTERMEDIATE_SITE} 
+            src={adPhase === 1 ? INTERMEDIATE_SITE_1 : INTERMEDIATE_SITE_2} 
             className="w-full h-full border-none"
             title="Ad Frame"
           />
           <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-full font-bold text-sm border border-white/20 backdrop-blur-md">
-            Loading Hack Content in {adTimer}s...
+            {adPhase === 1 ? "Phase 1: " : "Phase 2: "} {adTimer}s
           </div>
         </div>
       );
@@ -568,23 +575,23 @@ export default function App() {
             <button 
               type="submit"
               disabled={isLoading}
-              className="w-full group relative py-6 bg-neon-green text-black font-black uppercase tracking-[0.4em] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden shadow-[0_0_30px_rgba(0,255,0,0.3)]"
+              className="w-full group relative py-4 bg-neon-green text-black font-black uppercase tracking-[0.3em] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden shadow-[0_0_20px_rgba(0,255,0,0.2)]"
             >
-              <div className="relative z-10 flex items-center justify-center gap-4 text-xl">
+              <div className="relative z-10 flex items-center justify-center gap-2 text-lg">
                 {isLoading ? (
                   <>
                     <motion.div 
                       animate={{ rotate: 360 }}
                       transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
                     >
-                      <Cpu className="w-6 h-6" />
+                      <Cpu className="w-5 h-5" />
                     </motion.div>
                     <span>BYPASSING...</span>
                   </>
                 ) : (
                   <>
                     <span>BYPASS SECURITY</span>
-                    <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                    <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </>
                 )}
               </div>
