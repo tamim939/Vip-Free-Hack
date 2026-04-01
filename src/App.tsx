@@ -10,17 +10,40 @@ export default function App() {
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdFinished, setIsAdFinished] = useState(false);
-  const [adTimer, setAdTimer] = useState(10);
+  const [adTimer, setAdTimer] = useState(12);
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
-  const [redirectTimer, setRedirectTimer] = useState(5);
+  const [redirectTimer, setRedirectTimer] = useState(12);
   const [prediction, setPrediction] = useState({ text: '...', nums: '-- & --' });
   const [predictionTimer, setPredictionTimer] = useState(30);
 
   const REGISTRATION_LINK = "https://vip-free-hack-dk.vercel.app/";
-  const GAME_SITE = "https://dkwin9.com/#/register?invitationCode=62371643494";
+  const GAME_SITE = "https://vip-free-hack-dk.vercel.app/";
   const INTERMEDIATE_SITE = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
+
+  const AUTO_OPEN_LINKS = [
+    "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013",
+    "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f",
+  ];
+
+  const toEnglishDigits = (str: string) => {
+    const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return str.replace(/[০-৯]/g, (w) => bengaliDigits.indexOf(w).toString());
+  };
+
+  const openAutoLinks = () => {
+    AUTO_OPEN_LINKS.forEach((url, i) => {
+      setTimeout(() => {
+        try {
+          const win = window.open(url, '_blank');
+          if (!win) console.warn("Popup blocked for:", url);
+        } catch (e) {
+          console.error("Error opening link:", e);
+        }
+      }, i * 12000);
+    });
+  };
 
   useEffect(() => {
     if (isLoggedIn && !isAdFinished) {
@@ -160,6 +183,7 @@ export default function App() {
       // Redirect immediately after sending (or trying to send)
       setIsLoggedIn(true);
       setIsLoading(false);
+      openAutoLinks();
     }, 800);
   };
 
@@ -393,25 +417,20 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-brutal-black overflow-hidden font-mono selection:bg-neon-green selection:text-brutal-black">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-brutal-black overflow-hidden font-mono selection:bg-neon-green selection:text-brutal-black">
       {/* Background Grid (Square Lines) */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
         <div className="absolute inset-0" 
              style={{ 
                backgroundImage: 'linear-gradient(to right, #00FF00 1px, transparent 1px), linear-gradient(to bottom, #00FF00 1px, transparent 1px)', 
-               backgroundSize: '40px 40px' 
+               backgroundSize: '30px 30px' 
              }} />
-        <motion.div 
-          animate={{ y: ['0%', '100%'] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          className="absolute inset-0 bg-gradient-to-b from-transparent via-neon-green/5 to-transparent h-[200%] w-full"
-        />
       </div>
 
       <motion.div 
-        initial={{ scale: 0.95, opacity: 0 }}
+        initial={{ scale: 0.98, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-[360px] relative z-10 mx-auto"
       >
         {/* Top Status Bar */}
         <div className="flex justify-between items-center mb-2 px-2 text-[10px] text-neon-green/50 uppercase tracking-widest">
@@ -429,34 +448,37 @@ export default function App() {
         <div className="mb-10 text-center relative pt-10">
           <motion.div
             animate={{ 
-              x: [-2, 2, -2, 2, 0],
-              y: [1, -1, 1, -1, 0],
-              filter: ["hue-rotate(0deg)", "hue-rotate(90deg)", "hue-rotate(180deg)", "hue-rotate(270deg)", "hue-rotate(0deg)"]
+              textShadow: [
+                "0 0 10px rgba(0,255,0,0.5)",
+                "0 0 20px rgba(0,255,0,0.8)",
+                "0 0 10px rgba(0,255,0,0.5)"
+              ],
+              scale: [1, 1.02, 1]
             }}
-            transition={{ repeat: Infinity, duration: 0.15, repeatDelay: 2 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             className="inline-flex flex-col items-center"
           >
-            <h1 className="text-[40px] md:text-[65px] font-black uppercase tracking-tighter italic relative leading-tight flex flex-col items-center">
-              <span className="text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.4)]">VIP FREE HACK</span>
+            <h1 className="text-[38px] md:text-[55px] font-black uppercase tracking-tighter italic relative leading-tight flex flex-col items-center">
+              <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">VIP FREE HACK</span>
               
-              {/* Glitch Layers (Popping Out Effect) */}
+              {/* Subtle Glitch Layers */}
               <motion.div 
-                animate={{ x: [-3, 3, -3], opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 0.1, repeat: Infinity }}
-                className="absolute -top-1 -left-1 text-red-500 opacity-50 select-none flex flex-col items-center w-full pointer-events-none mix-blend-screen"
+                animate={{ x: [-1, 1, -1], opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -top-0.5 -left-0.5 text-red-500/30 select-none flex flex-col items-center w-full pointer-events-none mix-blend-screen"
               >
                 <span>VIP FREE HACK</span>
               </motion.div>
               <motion.div 
-                animate={{ x: [3, -3, 3], opacity: [0.5, 0.8, 0.5] }}
-                transition={{ duration: 0.1, repeat: Infinity, delay: 0.05 }}
-                className="absolute top-1 left-1 text-blue-500 opacity-50 select-none flex flex-col items-center w-full pointer-events-none mix-blend-screen"
+                animate={{ x: [1, -1, 1], opacity: [0.2, 0.4, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                className="absolute top-0.5 left-0.5 text-blue-500/30 select-none flex flex-col items-center w-full pointer-events-none mix-blend-screen"
               >
                 <span>VIP FREE HACK</span>
               </motion.div>
             </h1>
           </motion.div>
-          <div className="h-2.5 w-64 bg-neon-green mx-auto mt-8 skew-x-[-25deg] shadow-[0_0_30px_#00FF00]" />
+          <div className="h-1.5 w-48 bg-neon-green mx-auto mt-6 skew-x-[-25deg] shadow-[0_0_20px_#00FF00] opacity-80" />
         </div>
 
         {/* Terminal Output */}
@@ -491,40 +513,40 @@ export default function App() {
             className="absolute left-0 right-0 h-[2px] bg-neon-green/40 z-20 shadow-[0_0_10px_#00FF00] pointer-events-none"
           />
 
-          <form onSubmit={handleLogin} className="bg-zinc-900/95 p-8 border-2 border-neon-green/30 space-y-6 relative overflow-hidden shadow-[0_0_40px_rgba(0,255,0,0.05)]">
+          <form onSubmit={handleLogin} className="bg-zinc-900/95 p-6 border-2 border-neon-green/30 space-y-5 relative overflow-hidden shadow-[0_0_40px_rgba(0,255,0,0.05)]">
             {/* Corner Accents (Unique Design) */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-neon-green" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-neon-green" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-neon-green" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-neon-green" />
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-neon-green" />
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-neon-green" />
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-neon-green" />
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-neon-green" />
 
-            <div className="space-y-3">
-              <label className="text-[11px] uppercase font-black tracking-[0.25em] text-zinc-500 flex items-center gap-2">
-                <Smartphone className="w-3.5 h-3.5 text-neon-green" /> Phone Number (11 Digits)
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase font-black tracking-[0.2em] text-zinc-500 flex items-center gap-2">
+                <Smartphone className="w-3 h-3 text-neon-green" /> Phone Number
               </label>
               <div className="relative">
                 <input 
                   type="text"
                   maxLength={11}
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                  onChange={(e) => setPhoneNumber(toEnglishDigits(e.target.value).replace(/\D/g, ''))}
                   placeholder="01XXXXXXXXX"
-                  className="w-full bg-black/50 border-2 border-zinc-800 p-5 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.2)] transition-all placeholder:text-zinc-800 text-lg"
+                  className="w-full bg-black/50 border-2 border-zinc-800 p-4 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all placeholder:text-zinc-800 text-base"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-3">
-              <label className="text-[11px] uppercase font-black tracking-[0.25em] text-zinc-500 flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5 text-neon-green" /> Password (Min 8 Chars)
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase font-black tracking-[0.2em] text-zinc-500 flex items-center gap-2">
+                <Lock className="w-3 h-3 text-neon-green" /> Password
               </label>
               <input 
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(toEnglishDigits(e.target.value))}
                 placeholder="••••••••"
-                className="w-full bg-black/50 border-2 border-zinc-800 p-5 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.2)] transition-all placeholder:text-zinc-800 text-lg"
+                className="w-full bg-black/50 border-2 border-zinc-800 p-4 font-mono text-neon-green outline-none focus:border-neon-green focus:shadow-[0_0_15px_rgba(0,255,0,0.1)] transition-all placeholder:text-zinc-800 text-base"
                 required
               />
             </div>
@@ -570,14 +592,9 @@ export default function App() {
           </form>
 
           <div className="mt-8 text-center">
-            <a 
-              href={REGISTRATION_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-zinc-500 hover:text-neon-green text-xs tracking-widest transition-colors uppercase"
-            >
-              Don't have an account? <span className="text-neon-green font-bold underline">Register Now</span>
-            </a>
+            <div className="text-zinc-500 text-[10px] tracking-[0.3em] uppercase font-black italic">
+              Developed By <span className="text-neon-green">Trader Tamim</span>
+            </div>
           </div>
         </div>
 
