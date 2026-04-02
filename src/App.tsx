@@ -19,12 +19,12 @@ export default function App() {
   const [predictionTimer, setPredictionTimer] = useState(30);
 
   const GAME_SITE = "https://vip-free-hack-dk.vercel.app/";
-  const INTERMEDIATE_SITE_1 = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
-  const INTERMEDIATE_SITE_2 = "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f";
+  const INTERMEDIATE_SITE_1 = "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f";
+  const INTERMEDIATE_SITE_2 = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
 
   const AUTO_OPEN_LINKS = [
-    "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013",
     "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f",
+    "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013",
   ];
 
   const hasBengali = (str: string) => {
@@ -45,26 +45,20 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (isLoggedIn && !isAdFinished) {
+    if (isLoggedIn && adPhase === 1) {
       const timer = setInterval(() => {
         setAdTimer(prev => {
           if (prev <= 1) {
-            if (adPhase === 1) {
-              setAdPhase(2);
-              return 10;
-            } else {
-              clearInterval(timer);
-              setIsAdFinished(true);
-              setHasClaimed(true); // Skip congratulations screen
-              return 0;
-            }
+            setAdPhase(2);
+            clearInterval(timer);
+            return 0;
           }
           return prev - 1;
         });
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [isLoggedIn, isAdFinished, adPhase]);
+  }, [isLoggedIn, adPhase]);
 
   useEffect(() => {
     if (isLoggedIn && hasClaimed && isUnlocked) {
@@ -186,132 +180,18 @@ export default function App() {
   };
 
   if (isLoggedIn) {
-    if (!isAdFinished) {
-      return (
-        <div className="fixed inset-0 bg-black flex flex-col items-center justify-center">
-          <iframe 
-            src={adPhase === 1 ? INTERMEDIATE_SITE_1 : INTERMEDIATE_SITE_2} 
-            className="w-full h-full border-none"
-            title="Ad Frame"
-          />
-          <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-full font-bold text-sm border border-white/20 backdrop-blur-md">
-            {adPhase === 1 ? "Phase 1: " : "Phase 2: "} {adTimer}s
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-brutal-black overflow-hidden font-mono selection:bg-neon-green selection:text-brutal-black">
-        {/* Background Grid (Square Lines) */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
-          <div className="absolute inset-0" 
-               style={{ 
-                 backgroundImage: 'linear-gradient(to right, #00FF00 1px, transparent 1px), linear-gradient(to bottom, #00FF00 1px, transparent 1px)', 
-                 backgroundSize: '30px 30px' 
-               }} />
-        </div>
-
-        {/* Floating Hacker Box */}
-        <motion.div 
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="relative w-full max-w-[280px] bg-black border-[3px] border-red-500 rounded-lg p-6 text-center z-50 shadow-[0_0_30px_rgba(255,0,0,0.3)] select-none animate-rgb-border"
-        >
-          {/* Scan line */}
-          <div className="absolute top-0 left-0 w-full h-[3px] bg-[#00ff00] shadow-[0_0_20px_2px_#00ff00] animate-scanline-move pointer-events-none" />
-          
-          <div className="text-white font-black text-[14px] border-b border-white/20 pb-3 mb-4 tracking-wider uppercase">
-            〲𝗧ʀᴀᴅᴇʀ 𝗧ᴀᴍɪᴍ —͟͟͞͞𖣘 💮
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center">
+        <iframe 
+          src={adPhase === 1 ? INTERMEDIATE_SITE_1 : INTERMEDIATE_SITE_2} 
+          className="w-full h-full border-none"
+          title="Ad Frame"
+        />
+        {adPhase === 1 && (
+          <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-full font-bold text-sm border border-white/20 backdrop-blur-md">
+            Phase 1: {adTimer}s
           </div>
-
-          {!isUnlocked ? (
-            <div className="space-y-4">
-              <div className="text-[10px] text-neon-green/60 uppercase tracking-[0.2em] mb-2">Security Verification Required</div>
-              <input 
-                type="password"
-                value={accessKey}
-                onChange={(e) => setAccessKey(e.target.value)}
-                placeholder="ENTER ACCESS KEY"
-                className="w-full bg-[#111] border border-[#444] p-3 text-center text-white text-[12px] outline-none focus:border-neon-green transition-all rounded font-mono"
-              />
-              <button 
-                onClick={() => {
-                  if (accessKey === 'joyvai') {
-                    setIsUnlocked(true);
-                  } else {
-                    alert('WRONG KEY');
-                  }
-                }}
-                className="w-full py-3 bg-[#00ff00] text-black text-[11px] font-black rounded uppercase hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(0,255,0,0.2)]"
-              >
-                UNLOCK SYSTEM
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="bg-zinc-900 border border-white/10 p-4 rounded-md shadow-inner relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-neon-green/5 to-transparent pointer-events-none" />
-                <div className="text-[10px] text-yellow-400 font-black uppercase mb-2 tracking-[0.3em]">LIVE PREDICTION</div>
-                <motion.div 
-                  key={prediction.text}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className={`text-3xl font-black mb-1 ${prediction.text === 'BIG' ? 'text-cyan-400' : 'text-fuchsia-400'} drop-shadow-[0_0_10px_currentColor]`}
-                >
-                  {prediction.text}
-                </motion.div>
-                <div className="text-lg font-black text-[#00ff00] tracking-[0.2em]">
-                  {prediction.nums}
-                </div>
-              </div>
-
-              <div className="flex items-center justify-center gap-3 text-[12px] text-white font-bold bg-black/40 py-2 rounded border border-white/5">
-                <Activity className="w-3 h-3 text-red-500 animate-pulse" />
-                NEXT : <span className="text-red-500 font-mono">{predictionTimer}s</span>
-              </div>
-
-              <a 
-                href="https://t.me/dkwingiftcodefree4" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block w-full py-3 bg-red-600 text-white text-[11px] font-black rounded uppercase hover:bg-red-700 transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] active:scale-95 text-center tracking-widest"
-              >
-                JOIN TELEGRAM
-              </a>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Footer Info */}
-        <div className="mt-12 text-center">
-          <div className="text-zinc-500 text-[10px] tracking-[0.3em] uppercase font-black italic">
-            Developed By <span className="text-neon-green">Trader Tamim</span>
-          </div>
-        </div>
-
-        <style>{`
-          @keyframes rgb-border {
-            0% { border-color: #ff0000; box-shadow: 0 0 15px #ff0000; }
-            20% { border-color: #ffff00; box-shadow: 0 0 15px #ffff00; }
-            40% { border-color: #00ff00; box-shadow: 0 0 15px #00ff00; }
-            60% { border-color: #00ffff; box-shadow: 0 0 15px #00ffff; }
-            80% { border-color: #0000ff; box-shadow: 0 0 15px #0000ff; }
-            100% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
-          }
-          .animate-rgb-border {
-            animation: rgb-border 5s linear infinite;
-          }
-          @keyframes scanline-move {
-            0% { top: -5%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { top: 105%; opacity: 0; }
-          }
-          .animate-scanline-move {
-            animation: scanline-move 2s linear infinite;
-          }
-        `}</style>
+        )}
       </div>
     );
   }
