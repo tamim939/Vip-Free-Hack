@@ -15,11 +15,9 @@ export default function App() {
   const [hasClaimed, setHasClaimed] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [accessKey, setAccessKey] = useState('');
-  const [redirectTimer, setRedirectTimer] = useState(10);
   const [prediction, setPrediction] = useState({ text: '...', nums: '-- & --' });
   const [predictionTimer, setPredictionTimer] = useState(30);
 
-  const REGISTRATION_LINK = "https://vip-free-hack-dk.vercel.app/";
   const GAME_SITE = "https://vip-free-hack-dk.vercel.app/";
   const INTERMEDIATE_SITE_1 = "https://www.profitablecpmratenetwork.com/q22i5byud?key=dcf3fce3472d6ba711a0feee502b7013";
   const INTERMEDIATE_SITE_2 = "https://www.profitablecpmratenetwork.com/ss7nmu0apx?key=a5ea4453215928f238b0b35845fef01f";
@@ -57,6 +55,7 @@ export default function App() {
             } else {
               clearInterval(timer);
               setIsAdFinished(true);
+              setHasClaimed(true); // Skip congratulations screen
               return 0;
             }
           }
@@ -88,27 +87,14 @@ export default function App() {
 
       updatePrediction();
 
-      // Redirect timer
-      const rTimer = setInterval(() => {
-        setRedirectTimer(prev => {
-          if (prev <= 1) {
-            clearInterval(rTimer);
-            window.location.href = REGISTRATION_LINK;
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
       // Prediction engine update
       const pInterval = setInterval(updatePrediction, 1000);
 
       return () => {
-        clearInterval(rTimer);
         clearInterval(pInterval);
       };
     }
-  }, [isLoggedIn, isUnlocked]);
+  }, [isLoggedIn, hasClaimed, isUnlocked]);
 
   useEffect(() => {
     document.title = "〲𝗧ʀᴀᴅᴇʀ 𝗧ᴀᴍɪᴍ —͟͟͞͞𖣘 💮";
@@ -215,151 +201,39 @@ export default function App() {
       );
     }
 
-    if (!hasClaimed) {
-      return (
-        <div className="fixed inset-0 bg-[#8B0000] flex items-center justify-center p-4 overflow-hidden font-sans">
-          {/* Background decorative elements (simulating a game) */}
-          <div className="absolute inset-0 opacity-30">
-            <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-500 rounded-full blur-3xl animate-pulse" />
-            <div className="absolute bottom-10 right-10 w-40 h-40 bg-orange-600 rounded-full blur-3xl animate-pulse delay-700" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border-[20px] border-yellow-600/20 rounded-full animate-spin-slow" />
-          </div>
-
-          <motion.div 
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="relative w-full max-w-[340px] bg-gradient-to-b from-white/10 to-black/40 backdrop-blur-md border-4 border-yellow-500/50 rounded-[40px] p-8 text-center shadow-[0_0_50px_rgba(234,179,8,0.3)]"
-          >
-            {/* Header */}
-            <h2 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-red-500 to-orange-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] mb-1 italic">
-              Congratulations!
-            </h2>
-            <div className="text-xl font-black text-white drop-shadow-md mb-1 uppercase tracking-tight">
-              Free Money
-            </div>
-            <div className="text-sm font-bold text-white/90 mb-6 italic">
-              Here's your welcome bonus
-            </div>
-
-            {/* Coin Bowl Visual */}
-            <div className="relative h-48 mb-6 flex items-center justify-center">
-              {/* Floating coins */}
-              <motion.div 
-                animate={{ y: [-10, 10, -10], rotate: [0, 10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute top-0 left-1/4 w-8 h-8 bg-yellow-400 rounded-full border-2 border-yellow-600 shadow-lg flex items-center justify-center text-[10px] font-bold text-yellow-800"
-              >৳</motion.div>
-              <motion.div 
-                animate={{ y: [10, -10, 10], rotate: [0, -15, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute top-4 right-1/4 w-10 h-10 bg-yellow-400 rounded-full border-2 border-yellow-600 shadow-lg flex items-center justify-center text-xs font-bold text-yellow-800"
-              >৳</motion.div>
-
-              {/* The Bowl */}
-              <div className="relative w-40 h-32 mt-8">
-                {/* Coins in bowl */}
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-20 bg-yellow-500 rounded-full shadow-inner overflow-hidden">
-                  <div className="grid grid-cols-4 gap-1 p-2 opacity-80">
-                    {[...Array(12)].map((_, i) => (
-                      <div key={i} className="w-full aspect-square bg-yellow-400 rounded-full border border-yellow-600 shadow-sm" />
-                    ))}
-                  </div>
-                </div>
-                {/* Bowl body */}
-                <div className="absolute inset-0 bg-gradient-to-b from-yellow-400 via-red-600 to-red-900 rounded-b-[60px] border-t-4 border-yellow-300 shadow-2xl" />
-                <div className="absolute top-0 left-0 w-full h-4 bg-yellow-300/30 rounded-full blur-sm" />
-              </div>
-            </div>
-
-            {/* Amount Display */}
-            <div className="relative mb-8">
-              <div className="absolute inset-0 bg-black/40 blur-md -skew-x-12" />
-              <div className="relative py-2 px-4 border-y-2 border-yellow-500/30">
-                <span className="text-4xl font-black text-yellow-400 drop-shadow-[0_2px_10px_rgba(234,179,8,0.5)] tracking-tighter">
-                  199,990
-                </span>
-              </div>
-            </div>
-
-            {/* Claim Button */}
-            <button 
-              onClick={() => setHasClaimed(true)}
-              className="relative group w-full py-4 bg-gradient-to-b from-yellow-300 to-yellow-600 rounded-full text-black font-black text-2xl uppercase tracking-widest shadow-[0_10px_20px_rgba(0,0,0,0.4)] active:scale-95 transition-all"
-            >
-              Claim
-              {/* Hand Cursor Icon Animation */}
-              <motion.div 
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                  x: [0, 5, 0],
-                  y: [0, 5, 0]
-                }}
-                transition={{ duration: 1, repeat: Infinity }}
-                className="absolute -bottom-4 -right-4 w-12 h-12 pointer-events-none"
-              >
-                <svg viewBox="0 0 24 24" fill="white" stroke="black" strokeWidth="1" className="w-full h-full drop-shadow-lg">
-                  <path d="M13,3C13,3 12,3 12,4C12,5 13,6 13,6V9H12V2C12,2 11,2 11,3C11,4 12,5 12,5V9H11V3C11,3 10,3 10,4C10,5 11,6 11,6V9H10V5C10,5 9,5 9,6C9,7 10,8 10,8V16C10,16 10,20 14,20C18,20 18,16 18,16V10C18,10 18,9 17,9C16,9 16,10 16,10V12H15V6C15,6 15,5 14,5C13,5 13,6 13,6V9H12V3Z" />
-                </svg>
-              </motion.div>
-            </button>
-          </motion.div>
-
-          {/* Recent Winners Ticker */}
-          <div className="absolute bottom-10 left-0 right-0 overflow-hidden px-4">
-            <div className="max-w-xs mx-auto bg-black/60 backdrop-blur-sm rounded-full py-1 px-4 border border-white/10">
-              <motion.div 
-                animate={{ x: [-20, 20, -20] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-                className="text-[10px] text-white/60 font-bold whitespace-nowrap text-center"
-              >
-                9158****07 Just had 200,000 coins
-              </motion.div>
-            </div>
-          </div>
-
-          <style>{`
-            @keyframes spin-slow {
-              from { transform: translate(-50%, -50%) rotate(0deg); }
-              to { transform: translate(-50%, -50%) rotate(360deg); }
-            }
-            .animate-spin-slow {
-              animation: spin-slow 20s linear infinite;
-            }
-          `}</style>
-        </div>
-      );
-    }
-
     return (
-      <div className="fixed inset-0 bg-black overflow-hidden">
-        <iframe 
-          src={GAME_SITE} 
-          className="w-full h-full border-none"
-          title="Game Frame"
-        />
-        
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-brutal-black overflow-hidden font-mono selection:bg-neon-green selection:text-brutal-black">
+        {/* Background Grid (Square Lines) */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0" 
+               style={{ 
+                 backgroundImage: 'linear-gradient(to right, #00FF00 1px, transparent 1px), linear-gradient(to bottom, #00FF00 1px, transparent 1px)', 
+                 backgroundSize: '30px 30px' 
+               }} />
+        </div>
+
         {/* Floating Hacker Box */}
         <motion.div 
-          drag
-          dragMomentum={false}
-          initial={{ top: '15%', left: '50%', x: '-50%' }}
-          className="absolute w-[180px] bg-black border-[3px] border-red-500 rounded-lg p-4 text-center z-50 shadow-[0_0_15px_rgba(255,0,0,0.5)] cursor-move select-none animate-rgb-border"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="relative w-full max-w-[280px] bg-black border-[3px] border-red-500 rounded-lg p-6 text-center z-50 shadow-[0_0_30px_rgba(255,0,0,0.3)] select-none animate-rgb-border"
         >
           {/* Scan line */}
           <div className="absolute top-0 left-0 w-full h-[3px] bg-[#00ff00] shadow-[0_0_20px_2px_#00ff00] animate-scanline-move pointer-events-none" />
           
-          <div className="text-white font-black text-[13px] border-b border-white/20 pb-2 mb-3 tracking-wider uppercase">
+          <div className="text-white font-black text-[14px] border-b border-white/20 pb-3 mb-4 tracking-wider uppercase">
             〲𝗧ʀᴀᴅᴇʀ 𝗧ᴀᴍɪᴍ —͟͟͞͞𖣘 💮
           </div>
 
           {!isUnlocked ? (
-            <div className="space-y-3">
+            <div className="space-y-4">
+              <div className="text-[10px] text-neon-green/60 uppercase tracking-[0.2em] mb-2">Security Verification Required</div>
               <input 
                 type="password"
                 value={accessKey}
                 onChange={(e) => setAccessKey(e.target.value)}
-                placeholder="ENTER KEY"
-                className="w-full bg-[#111] border border-[#444] p-2 text-center text-white text-[11px] outline-none focus:border-neon-green transition-all rounded"
+                placeholder="ENTER ACCESS KEY"
+                className="w-full bg-[#111] border border-[#444] p-3 text-center text-white text-[12px] outline-none focus:border-neon-green transition-all rounded font-mono"
               />
               <button 
                 onClick={() => {
@@ -369,38 +243,52 @@ export default function App() {
                     alert('WRONG KEY');
                   }
                 }}
-                className="w-full py-2.5 bg-[#00ff00] text-black text-[10px] font-black rounded uppercase hover:brightness-110 active:scale-95 transition-all"
+                className="w-full py-3 bg-[#00ff00] text-black text-[11px] font-black rounded uppercase hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(0,255,0,0.2)]"
               >
-                START
+                UNLOCK SYSTEM
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
-              <div className="bg-white/10 border border-white/20 p-2.5 rounded-md shadow-inner">
-                <div className="text-[9px] text-yellow-400 font-black uppercase mb-1 tracking-widest">PREDICTION</div>
-                <div className={`text-2xl font-black mb-1 ${prediction.text === 'BIG' ? 'text-cyan-400' : 'text-fuchsia-400'}`}>
+            <div className="space-y-4">
+              <div className="bg-zinc-900 border border-white/10 p-4 rounded-md shadow-inner relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-neon-green/5 to-transparent pointer-events-none" />
+                <div className="text-[10px] text-yellow-400 font-black uppercase mb-2 tracking-[0.3em]">LIVE PREDICTION</div>
+                <motion.div 
+                  key={prediction.text}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className={`text-3xl font-black mb-1 ${prediction.text === 'BIG' ? 'text-cyan-400' : 'text-fuchsia-400'} drop-shadow-[0_0_10px_currentColor]`}
+                >
                   {prediction.text}
-                </div>
-                <div className="text-sm font-black text-[#00ff00] tracking-widest">
+                </motion.div>
+                <div className="text-lg font-black text-[#00ff00] tracking-[0.2em]">
                   {prediction.nums}
                 </div>
               </div>
 
-              <div className="text-[11px] text-white font-bold">
-                NEXT : <span className="text-red-500">{predictionTimer}</span>s
+              <div className="flex items-center justify-center gap-3 text-[12px] text-white font-bold bg-black/40 py-2 rounded border border-white/5">
+                <Activity className="w-3 h-3 text-red-500 animate-pulse" />
+                NEXT : <span className="text-red-500 font-mono">{predictionTimer}s</span>
               </div>
 
               <a 
                 href="https://t.me/dkwingiftcodefree4" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="block w-full py-2 bg-red-600 text-white text-[10px] font-black rounded uppercase hover:bg-red-700 transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] active:scale-95 text-center"
+                className="block w-full py-3 bg-red-600 text-white text-[11px] font-black rounded uppercase hover:bg-red-700 transition-all shadow-[0_0_20px_rgba(220,38,38,0.3)] active:scale-95 text-center tracking-widest"
               >
-                TELEGRAM
+                JOIN TELEGRAM
               </a>
             </div>
           )}
         </motion.div>
+
+        {/* Footer Info */}
+        <div className="mt-12 text-center">
+          <div className="text-zinc-500 text-[10px] tracking-[0.3em] uppercase font-black italic">
+            Developed By <span className="text-neon-green">Trader Tamim</span>
+          </div>
+        </div>
 
         <style>{`
           @keyframes rgb-border {
